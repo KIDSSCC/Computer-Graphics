@@ -34,21 +34,22 @@ namespace NRenderer
         Vec3 constant = {};
         Handle environmentMap = {};
     };
-
+    //场景结构
     struct Scene
     {
         Camera camera;
 
         RenderOption renderOption;
-
+        //环境光
         Ambient ambient;
 
-        // buffers
+        // buffers，材质与纹理
         vector<Material> materials;
         vector<Texture> textures;
-
+        //模型和节点
         vector<Model> models;
         vector<Node> nodes;
+
         // object buffer
         vector<Sphere> sphereBuffer;
         vector<Triangle> triangleBuffer;
@@ -58,7 +59,7 @@ namespace NRenderer
         vector<Light> lights;
         // light buffer
         vector<PointLight> pointLightBuffer;
-        vector<AreaLight> areaLightBuffer;
+        vector<AreaLight> areaLightBuffer;          //面光源
         vector<DirectionalLight> directionalLightBuffer;
         vector<SpotLight> spotLightBuffer;
     };

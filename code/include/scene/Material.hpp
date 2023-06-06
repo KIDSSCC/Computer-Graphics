@@ -94,7 +94,7 @@ namespace NRenderer
         Material() = default;
 
     public:
-        
+        //材质与材质属性
         unsigned int type = 0;
 
         vector<Property> properties;

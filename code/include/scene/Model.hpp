@@ -29,6 +29,7 @@ namespace NRenderer
     
     struct Triangle : public Entity
     {
+        //三个顶点的坐标
         union {
             struct {
                 Vec3 v1;
@@ -37,6 +38,7 @@ namespace NRenderer
             };
             Vec3 v[3];
         };
+        //法向量
         Vec3 normal;
         Triangle()
             : v1            ()
@@ -61,6 +63,7 @@ namespace NRenderer
         vector<Vec3> normals;
         vector<Vec3> positions;
         vector<Vec2> uvs;
+
         vector<Index> normalIndices;
         vector<Index> positionIndices;
         vector<Index> uvIndices;
@@ -85,14 +88,18 @@ namespace NRenderer
             MESH = 0X3
         };
         Type type = Type::SPHERE;
+        //实体的索引和所属模型的索引
         Index entity;
         Index model;
     };
     SHARE(Node);
 
     struct Model {
+        //节点的索引
         vector<Index> nodes;
+        //世界坐标的位置
         Vec3 translation = {0, 0, 0};
+        //缩放
         Vec3 scale = {1, 1, 1};
     };
     SHARE(Model);

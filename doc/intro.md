@@ -169,7 +169,7 @@ struct Material
     public:
         Scattered shade(const Ray& ray, const Vec3& hitPoint, const Vec3& normal) const;
     };
-
+  
     Lambertian::Lambertian(Material& material)
         : Shader                (material, textures)
     {
@@ -209,14 +209,14 @@ struct Material
             return shader;
         }
     };
-
+  
     ...
-
+  
     // 通过ShaderCreator, 创建Shader
     vector<SharedShader> shaderPrograms;
-
+  
     ...
-
+  
     // 使用
     auto scattered = shaderPrograms[mtlHandle.index()]->shade(r, hitObject->hitPoint, hitObject->normal);
   ```

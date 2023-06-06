@@ -6,6 +6,7 @@
 
 #include "geometry/vec.hpp"
 
+//光线的追踪记录？
 namespace SimplePathTracer
 {
     using namespace NRenderer;
