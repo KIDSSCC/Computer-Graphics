@@ -71,9 +71,13 @@ namespace SimplePathTracer
         delete[] p;
     }
 
+    //求解最近碰撞物体
     HitRecord SimplePathTracerRenderer::closestHitObject(const Ray& r) {
+        //最近的交点，默认为空，距离为无穷大
         HitRecord closestHit = nullopt;
         float closest = FLOAT_INF;
+
+        //遍历所有的球体，获取与最近球体的交点
         for (auto& s : scene.sphereBuffer) {
             auto hitRecord = Intersection::xSphere(r, s, 0.000001, closest);
             if (hitRecord && hitRecord->t < closest) {
@@ -81,6 +85,7 @@ namespace SimplePathTracer
                 closestHit = hitRecord;
             }
         }
+        //遍历所有的三角面片
         for (auto& t : scene.triangleBuffer) {
             auto hitRecord = Intersection::xTriangle(r, t, 0.000001, closest);
             if (hitRecord && hitRecord->t < closest) {
@@ -88,6 +93,7 @@ namespace SimplePathTracer
                 closestHit = hitRecord;
             }
         }
+        //遍历所有的平面
         for (auto& p : scene.planeBuffer) {
             auto hitRecord = Intersection::xPlane(r, p, 0.000001, closest);
             if (hitRecord && hitRecord->t < closest) {
@@ -95,12 +101,16 @@ namespace SimplePathTracer
                 closestHit = hitRecord;
             }
         }
+        //返回最近的交点
         return closestHit; 
     }
     
+    //获取与当前光线最近的光源的交点信息
     tuple<float, Vec3> SimplePathTracerRenderer::closestHitLight(const Ray& r) {
         Vec3 v = {};
         HitRecord closest = getHitRecord(FLOAT_INF, {}, {}, {});
+
+        //遍历所有的区域光源，更新最近交点
         for (auto& a : scene.areaLightBuffer) {
             auto hitRecord = Intersection::xAreaLight(r, a, 0.000001, closest->t);
             if (hitRecord && closest->t > hitRecord->t) {
@@ -108,14 +118,19 @@ namespace SimplePathTracer
                 v = a.radiance;
             }
         }
+        //返回最近的距离和辐射强度
         return { closest->t, v };
     }
 
     RGB SimplePathTracerRenderer::trace(const Ray& r, int currDepth) {
+        //如果已经达到当前的最大深度，则直接返回当前的环境背景光
         if (currDepth == depth) return scene.ambient.constant;
         auto hitObject = closestHitObject(r);
+
+        //找到与光线最近的光源的交点信息。获取距离和辐射强度
         auto [ t, emitted ] = closestHitLight(r);
         // hit object
+        //是指先碰到了物体，后碰到了区域光源。
         if (hitObject && hitObject->t < t) {
             auto mtlHandle = hitObject->material;
             auto scattered = shaderPrograms[mtlHandle.index()]->shade(r, hitObject->hitPoint, hitObject->normal);

@@ -60,7 +60,7 @@ namespace SimplePathTracer
         //进行伽马矫正，使用了glm::sqrt
         RGB gamma(const RGB& rgb);
 
-        //追踪光纤
+        //追踪光线
         RGB trace(const Ray& ray, int currDepth);
 
         //求解最近碰撞物体

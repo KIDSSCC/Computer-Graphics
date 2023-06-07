@@ -12,9 +12,10 @@ namespace SimplePathTracer
     using namespace NRenderer;
     using namespace std;
 
-
+    //光线对象
     struct Ray
     {
+        //射线的起点与方向
         Vec3 origin;
         // keep it as a unit vector
         Vec3 direction;

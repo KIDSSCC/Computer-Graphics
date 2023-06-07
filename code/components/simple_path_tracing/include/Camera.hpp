@@ -17,6 +17,8 @@ namespace SimplePathTracer
     {
     private:
         const NRenderer::Camera& camera;
+
+        //光圈半径
         float lenRadius;
         Vec3 u, v, w;
         Vec3 vertical;
@@ -29,11 +31,16 @@ namespace SimplePathTracer
         {
             position = camera.position;
             lenRadius = camera.aperture / 2.f;
+
+            //对相机的视野角度进行约束
             auto vfov = camera.fov;
             vfov = clamp(vfov, 160.f, 20.f);
             auto theta = glm::radians(vfov);
+
+
             auto halfHeight = tan(theta/2.f);
             auto halfWidth = camera.aspect*halfHeight;
+
             Vec3 up = camera.up;
             w = glm::normalize(camera.position - camera.lookAt);
             u = glm::normalize(glm::cross(up, w));
