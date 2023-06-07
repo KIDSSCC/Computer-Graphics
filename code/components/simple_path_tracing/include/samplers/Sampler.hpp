@@ -7,6 +7,7 @@
 namespace SimplePathTracer
 {
     using std::mutex;
+    //可以获取一个递增的种子值
     class Sampler
     {
     protected:

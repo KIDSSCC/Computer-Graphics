@@ -14,10 +14,16 @@ namespace SimplePathTracer
     }
 
     void SimplePathTracerRenderer::renderTask(RGBA* pixels, int width, int height, int off, int step) {
+        //off是偏移量，代表了从第几行开始进行渲染
+        //step是每次渲染的行数
         for(int i=off; i<height; i+=step) {
             for (int j=0; j<width; j++) {
                 Vec3 color{0, 0, 0};
+
+                //samples是当前类中设定的采样次数
                 for (int k=0; k < samples; k++) {
+
+                    //在（-1，-1）至（1，1）中均匀分布的随机二维向量
                     auto r = defaultSamplerInstance<UniformInSquare>().sample2d();
                     float rx = r.x;
                     float ry = r.y;

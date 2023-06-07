@@ -8,6 +8,7 @@
 
 namespace SimplePathTracer
 {
+    //继承自Sampler，一维采样得到一个浮点数
     class Sampler1d : protected Sampler
     {
     public:

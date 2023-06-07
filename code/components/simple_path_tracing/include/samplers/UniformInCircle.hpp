@@ -7,6 +7,7 @@
 namespace SimplePathTracer
 {
     using namespace std;
+    //二维圆形内采样
     class UniformInCircle : public Sampler2d
     {
     private:

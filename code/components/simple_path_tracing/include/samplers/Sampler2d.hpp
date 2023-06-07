@@ -10,6 +10,7 @@
 namespace SimplePathTracer
 {
     using NRenderer::Vec2;
+    //二维采样得到Vec2
     class Sampler2d : public Sampler
     {
     public:

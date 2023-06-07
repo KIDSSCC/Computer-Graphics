@@ -10,6 +10,7 @@
 namespace SimplePathTracer
 {
     using NRenderer::Vec3;
+    //三维采样得到一个Vec3
     class Sampler3d : public Sampler
     {
         

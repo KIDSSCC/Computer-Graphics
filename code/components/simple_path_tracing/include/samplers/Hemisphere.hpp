@@ -8,6 +8,7 @@
 namespace SimplePathTracer
 {
     using namespace std;
+    //三维采样，形状没看懂
     class HemiSphere : public Sampler3d
     {
     private:

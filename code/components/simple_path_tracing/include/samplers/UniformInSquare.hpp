@@ -8,6 +8,7 @@
 namespace SimplePathTracer
 {
     using namespace std;
+    //二维矩形内采样
     class UniformInSquare: public Sampler2d
     {
     private:

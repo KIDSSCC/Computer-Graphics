@@ -13,6 +13,9 @@ namespace SimplePathTracer
     class Adapter : public RenderComponent
     {
         void render(SharedScene spScene) {
+
+            //创建一个SimplePathTracerRenderer对象，传入需要渲染的场景
+            //通过render函数进行渲染，得到渲染结果
             SimplePathTracerRenderer renderer{spScene};
             auto renderResult = renderer.render();
             auto [ pixels, width, height ]  = renderResult;

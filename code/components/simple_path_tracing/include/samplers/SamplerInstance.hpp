@@ -12,6 +12,8 @@ namespace SimplePathTracer
 {
     template<typename T>
     T& defaultSamplerInstance() {
+
+        //模板类型必须是Sampler1d，Sampler2d，Sampler3d的派生类
         static_assert(
             is_base_of<Sampler1d, T>::value ||
             is_base_of<Sampler2d, T>::value ||

@@ -8,6 +8,7 @@
 namespace SimplePathTracer
 {
     using namespace std;
+    //三维采样，但具体的形状没看懂
     class Marsaglia : public Sampler3d
     {
     private:

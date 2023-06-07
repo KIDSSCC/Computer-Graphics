@@ -8,6 +8,7 @@
 namespace SimplePathTracer
 {
     using namespace std;
+    //一维均匀采样
     class UniformSampler : public Sampler1d
     {
     private:
