@@ -12,9 +12,12 @@ namespace NRenderer
     using namespace std;
     struct Camera
     {
+        //相机的位置，上方向，观察目标点
         Vec3 position;
         Vec3 up;
         Vec3 lookAt;
+
+        //视野角度，光圈大小，焦距，宽高比
         float fov;
         float aperture;
         float focusDistance;

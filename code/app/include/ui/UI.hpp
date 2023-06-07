@@ -34,6 +34,8 @@ namespace NRenderer
         UI(unsigned int width, unsigned int height, const string& title);
         UI(const UI&) = delete;
         ~UI();
+
+        //初始化窗口和OpenGL上下文
         void init();
         void run();
     };

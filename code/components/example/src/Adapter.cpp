@@ -19,7 +19,8 @@ namespace RenderExample
             RGBA* pixels = new RGBA[height*width]{};
             for (int i=0; i<height; i++) {
                 for (int j=0; j<width; j++) {
-                    pixels[i*width+j] = {float(i)/float(height), float(j)/float(width), 1.f, 1.f};
+                    //pixels[i*width+j] = {float(i)/float(height), float(j)/float(width), 1.f, 1.f};
+                    pixels[i * width + j] = { 0,0, 1.f, 1.f };
                 }
             }
             // 输出颜色
@@ -27,6 +28,7 @@ namespace RenderExample
             delete[] pixels;
 
             // logger
+            getServer().logger.log("running here");
             getServer().logger.log("common...");
             getServer().logger.success("success...");
             getServer().logger.warning("warning...");

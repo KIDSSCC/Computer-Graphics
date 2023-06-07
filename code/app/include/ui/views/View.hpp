@@ -12,11 +12,15 @@ namespace NRenderer
     class View
     {
     protected:
+        //大小与位置
         Vec2 position;
         Vec2 size;
+
+        //UI上下文和manager
         UIContext& uiContext;
         Manager& manager;
 
+        //是否被禁用，是否可见，是否能够改变大小
         bool disable;
         bool visible;
         bool resizable;
@@ -25,9 +29,12 @@ namespace NRenderer
 
         virtual void drawSetup();
         virtual void drawFinish();
+
         virtual void drawPosAndSize();
+
         virtual void drawBeginWindow() = 0;
         virtual void drawEndWindow();
+
         virtual void draw() = 0;
 
         void makeHelper(const char* desc);

@@ -9,7 +9,7 @@
 namespace NRenderer
 {
 	using Index = unsigned int;
-
+	//注意句柄的值和索引之间的关系，索引从0开始，但有效的句柄的值从1开始
 	class Handle
 	{
 	private:

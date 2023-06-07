@@ -22,8 +22,10 @@ namespace NRenderer
             PREVIEW_LIGHT
         };
 
+        //当前的预览模式
         PreviewMode previewMode;
 
+        //预览的模型，节点，光源的编号
         Index previewModel;
         Index previewNode;
         Index previewLight;

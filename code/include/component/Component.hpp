@@ -8,6 +8,7 @@
 namespace NRenderer
 {
     using namespace std;
+    //¼Ì³Ğ×ÔInstanceÀà
     class DLL_EXPORT Component: public Instance
     {
     private:
