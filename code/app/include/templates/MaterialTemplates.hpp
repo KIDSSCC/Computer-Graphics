@@ -11,6 +11,7 @@ namespace NRenderer
     class DLL_EXPORT MaterialTemplates
     {
     public:
+        //每个模板由一个索引，一个名称，一组属性构成
         struct Template
         {
             unsigned int index;
@@ -21,6 +22,7 @@ namespace NRenderer
         static unordered_map<int, Template> templates;
 
     private:
+        //初始有5中模板
         struct InitTemplates
         {
             template<typename T>

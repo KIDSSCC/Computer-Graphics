@@ -9,9 +9,11 @@
 #include "server/Server.hpp"
 namespace NRenderer
 {
+    //对于场景中各项资源的管理
     struct AssetManager
     {
         Asset asset;
+        //导入文件场景
         void importScene() {
             FileFetcher ff;
             auto optPath = ff.fetch("All\0*.scn;*.obj\0");
@@ -26,6 +28,7 @@ namespace NRenderer
                 }
             }
         }
+        //导入纹理
         void importTexture() {
             TextureImporter tImp{};
             FileFetcher ff;
@@ -34,6 +37,7 @@ namespace NRenderer
                 tImp.import(asset, *optPath);
             }
         }
+        //清除场景中的所有资源
         void clearAll() {
             asset.clearModel();
             asset.clearLight();

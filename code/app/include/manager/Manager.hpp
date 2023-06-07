@@ -8,6 +8,8 @@
 
 namespace NRenderer
 {
+    //具体包含AssetManager，RenderSettingsManager，ComponentManager
+    //提供一个统一的访问入口
     class Manager
     {
     public:
