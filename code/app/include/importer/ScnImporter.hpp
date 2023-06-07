@@ -11,10 +11,12 @@ namespace NRenderer
     class ScnImporter: public Importer
     {
     private:
+        //解析材质，模型，灯光
         bool parseMtl(Asset& asset, ifstream& file, map<string, size_t>& mtlMap);
         bool parseMdl(Asset& asset, ifstream& file, map<string, size_t>& mtlMap);
         bool parseLgt(Asset& asset, ifstream& file);
     public:
+        //重写了import，读取给定的场景信息
         virtual bool import(Asset& asset, const string& path) override;
     };
 }

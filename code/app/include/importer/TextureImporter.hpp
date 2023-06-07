@@ -6,6 +6,7 @@
 
 namespace NRenderer
 {
+    //对于纹理的解析
     class TextureImporter : public Importer
     {
     public:

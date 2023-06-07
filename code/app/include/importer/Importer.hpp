@@ -11,8 +11,10 @@ namespace NRenderer
     class Importer
     {
     protected:
+        //发生错误时的错误信息
         string lastErrorInfo;
     public:
+        //返回一个bool值代表是否导入成功
         virtual bool import(Asset& asset, const string& path) = 0;
         inline
         string getErrorInfo() const {
@@ -23,6 +25,7 @@ namespace NRenderer
         {}
         virtual ~Importer() = default;
     };
+    //可共享智能指针
     SHARE(Importer);
 }
 
