@@ -95,6 +95,7 @@ namespace NRenderer
     SHARE(Node);
 
     struct Model {
+        //Index就是int类型
         //节点的索引
         vector<Index> nodes;
         //世界坐标的位置

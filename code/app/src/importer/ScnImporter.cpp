@@ -98,6 +98,7 @@ namespace NRenderer
         return successFlag;
     }
 
+    //加载scn文件中的模型信息
     bool ScnImporter::parseMdl(Asset& asset, ifstream& file, map<string, size_t>& mtlMap) {
         string currline;
         
@@ -118,21 +119,26 @@ namespace NRenderer
             if (token=="") continue;
             else if (token[0] == '#') continue;
             else if (token == "Model") {
+                //模型的名字
                 modelItem = ModelItem{};
                 ss>>modelItem.name;
                 modelItem.model = make_shared<Model>();
                 asset.modelItems.push_back(modelItem);
             }
+            //位置
             else if (token == "Translation") {
                 float f1, f2, f3;
                 ss>>f1>>f2>>f3;
                 (asset.modelItems.end() - 1)->model->translation = {f1, f2, f3};
             }
+            //缩放
             else if (token == "Scale") {
                 float f1, f2, f3;
                 ss>>f1>>f2>>f3;
                 (asset.modelItems.end() - 1)->model->scale = {f1, f2, f3};
             }
+
+            //一个球体
             else if (token == "Sphere") {
                 NodeItem ni{};
                 ss>>ni.name;
@@ -147,6 +153,10 @@ namespace NRenderer
                     successFlag = false;
                     break;
                 }
+
+                //为model的智能指针的nodes数组加入节点在nodeItem中的索引，
+                //当前节点管理的实体就是asset.spheres中的一个对象，
+                //当前节点所属的对象就是modelItem中的最后一个
                 asset.modelItems[asset.modelItems.size() - 1].model->nodes.push_back(asset.nodeItems.size());
                 ni.node->entity = asset.spheres.size();
                 ni.node->model = asset.modelItems.size() - 1;
@@ -465,6 +475,7 @@ namespace NRenderer
         string currline;
         stringstream ss{};
 
+        //对于材质的映射
         map<string, size_t> mtlMap;
         
         while(getline(file, currline)) {

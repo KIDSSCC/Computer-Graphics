@@ -5,8 +5,135 @@
 
 #include "imgui_internal.h"
 
+#include<iostream>
+#include <fstream>
+#include <sstream>
+
 namespace NRenderer
 {
+    bool addModel(Asset &asset,string path)
+    {
+        //从指定的文件中加载一个新的模型
+        ifstream file(path);
+        if (!file.is_open()) {
+            getServer().logger.error("File not find");
+            return false;
+        }
+        size_t beginNode = asset.nodeItems.size();
+        string currline;
+        stringstream ss{};
+        ModelItem modelItem;
+        bool successFlag = true;
+        int currNodeType = 0;
+        while (getline(file, currline))
+        {
+            ss.str("");
+            ss.clear();
+            string token;
+            ss << currline;
+            ss >> token;
+            if (successFlag == false) {
+                break;
+            }
+            if (token == "") continue;
+            else if (token[0] == '#') continue;
+            else if (token == "Model") 
+            {
+                //模型的名字
+                modelItem = ModelItem{};
+                ss >> modelItem.name;
+                modelItem.model = make_shared<Model>();
+                asset.modelItems.push_back(modelItem);
+            }
+            //位置
+            else if (token == "Translation") {
+                float f1, f2, f3;
+                ss >> f1 >> f2 >> f3;
+                (asset.modelItems.end() - 1)->model->translation = { f1, f2, f3 };
+            }
+            //缩放
+            else if (token == "Scale") {
+                float f1, f2, f3;
+                ss >> f1 >> f2 >> f3;
+                (asset.modelItems.end() - 1)->model->scale = { f1, f2, f3 };
+            }
+            else if (token == "Sphere")
+            {
+                NodeItem ni{};
+                ss >> ni.name;
+                ni.node = SharedNode{ new Node{} };
+                ni.node->type = Node::Type::SPHERE;
+                currNodeType = 0;
+                string mtlName;
+                ss >> mtlName;
+                //在asset的materialItem数组中遍历查找当前的
+                int i = 0;
+                for (i; i < asset.materialItems.size(); i++)
+                {
+                    if (asset.materialItems[i].name == mtlName)
+                        break;
+                }
+                //没找到
+                if (i == asset.materialItems.size())
+                {
+                    getServer().logger.error("the material not exists");
+                    return false;
+                }
+                asset.modelItems[asset.modelItems.size() - 1].model->nodes.push_back(asset.nodeItems.size());
+                ni.node->entity = asset.spheres.size();
+                ni.node->model = asset.modelItems.size() - 1;
+                asset.nodeItems.push_back(ni);
+                asset.spheres.push_back(SharedSphere{ new Sphere() });
+                asset.spheres[asset.spheres.size() - 1]->material = i;
+            }
+            else if (token == "R") {
+                // radius of sphere
+                float f;
+                ss >> f;
+                auto it = asset.spheres.end() - 1;
+                (*it)->radius = f;
+            }
+            else if (token == "N") {
+                float f1, f2, f3;
+                ss >> f1 >> f2 >> f3;
+                Vec3 n = { f1, f2, f3 };
+                if (currNodeType == 0) {
+                    auto it = asset.spheres.end() - 1;
+                    (*it)->direction = n;
+                }
+                else if (currNodeType == 1) {
+                    auto it = asset.triangles.end() - 1;
+                    (*it)->normal = n;
+                }
+                else if (currNodeType == 2) {
+                    auto it = asset.planes.end() - 1;
+                    (*it)->normal = n;
+                }
+            }
+            else if (token == "P") {
+                float f1, f2, f3;
+                ss >> f1 >> f2 >> f3;
+                Vec3 p = { f1, f2, f3 };
+                if (currNodeType == 0) {
+                    auto it = asset.spheres.end() - 1;
+                    (*it)->position = p;
+                }
+                else if (currNodeType == 2) {
+                    auto it = asset.planes.end() - 1;
+                    (*it)->position = p;
+                }
+            }
+            else if (token == "End") {
+                break;
+            }
+        }
+        for (auto i = beginNode; i < asset.nodeItems.size(); i++) {
+            asset.genPreviewGlBuffersPerNode(asset.nodeItems[i]);
+        }
+        return true;
+    }
+
+
     AssetView::AssetView(const Vec2& position, const Vec2& size, UIContext& uiContext, Manager& manager)
         : View              (position, size, uiContext, manager)
         , tempProp          ("property", Property::Wrapper::IntType{})
@@ -207,11 +334,58 @@ namespace NRenderer
     }
 
     void AssetView::modelTab() {
-        ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-        ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
-        ImGui::Button("Add...(Todo)");
-        ImGui::PopItemFlag();
-        ImGui::PopStyleVar();
+        //ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+        //ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+        //ImGui::Button("Add...(Todo)");
+        //ImGui::PopItemFlag();
+        //ImGui::PopStyleVar();
+        
+        
+        
+
+        //点击add时弹出窗口
+        if (ImGui::Button("Add...(model)"))
+        {
+            FileFetcher ff;
+            auto optPath = ff.fetch("All\0*.mdl\0");
+            if (optPath)
+            {
+                //选择了某一个模型文件
+                addModel(manager.assetManager.asset, *optPath);
+            }
+        }
+        //ImVec2 center(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f);
+        //ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+        //if (ImGui::BeginPopupModal("Add Model", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+        //{
+        //    if (ImGui::Button(" Sphere ")) {
+        //        //添加一个球体，
+        //        auto& curr_asset = manager.assetManager.asset;
+        //        //先创建一个模型，添加到asset中
+        //        ModelItem modelItem = ModelItem{};
+        //    }
+
+
+        //    if (ImGui::Button("Templates")) {
+        //        //wait to do 
+        //    }
+
+        //    ImGui::Separator();
+
+        //    ImGui::BeginChild("Material Props", { 100, 100 });
+        //    {
+        //        materialPropEditor(tempMaterialItem.material);
+        //    }
+        //    ImGui::EndChild();
+        //    if (ImGui::Button("Cancel##Add_Material")) {
+        //        ImGui::CloseCurrentPopup();
+        //    }
+        //    ImGui::EndPopup();
+        //}
+        /*******************************************************************************************/
+
+
+
         ImGui::Separator();
         ImGui::Columns(2);
         ImGui::BeginChild("ModelSelect");
@@ -226,14 +400,19 @@ namespace NRenderer
                 ImGui::TableSetupColumn("Name");
                 ImGui::TableSetupColumn("Type");
 
+                //场景中的所有模型
                 auto& mis = manager.assetManager.asset.modelItems;
-
+                cout << "before traverse: " << mis.size() << endl;
                 for(int i=0; i<mis.size(); i++) {
+
+                    
+                    //对于场景中的每一个模型
                     auto& mi = mis[i];
                     ImGui::TableNextRow();
                     ImGui::TableNextColumn();
                     bool before_selected = (uiContext.previewModel == i); 
                     bool model_selected = (uiContext.previewModel == i);
+
                     ImGui::Bullet();
                     if (ImGui::Selectable(("##ModelItemIndex"+to_string(i+1)).c_str(), &model_selected, ImGuiSelectableFlags_SpanAllColumns)) {
                         if (!before_selected) {
@@ -244,6 +423,9 @@ namespace NRenderer
                             uiContext.previewModel = -1;
                         }
                     }
+
+                    
+
                     ImGui::TableNextColumn();
                     ImGui::TextUnformatted((mi.name).c_str());
                     ImGui::TableNextColumn();
@@ -284,6 +466,7 @@ namespace NRenderer
                             ImGui::TextUnformatted(typeStr.c_str());
                         }
                     }
+                    
                 }
 
                 ImGui::EndTable();

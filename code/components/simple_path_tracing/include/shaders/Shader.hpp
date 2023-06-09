@@ -14,10 +14,11 @@ namespace SimplePathTracer
     using namespace std;
 
     constexpr float PI = 3.1415926535898f;
-
+    //渲染时的着色器
     class Shader
     {
     protected:
+        //材质与纹理的引用
         Material& material;
         vector<Texture>& textureBuffer;
     public:

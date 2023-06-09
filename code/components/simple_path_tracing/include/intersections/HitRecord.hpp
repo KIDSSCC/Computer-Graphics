@@ -11,6 +11,7 @@ namespace SimplePathTracer
 {
     using namespace NRenderer;
     using namespace std;
+    //定义了光线和物体相交的结构
     struct HitRecordBase
     {
         float t;

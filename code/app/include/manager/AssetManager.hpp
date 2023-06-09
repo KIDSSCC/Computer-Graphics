@@ -7,6 +7,8 @@
 #include "importer/SceneImporterFactory.hpp"
 #include "utilities/File.hpp"
 #include "server/Server.hpp"
+
+#include<iostream>
 namespace NRenderer
 {
     //对于场景中各项资源的管理

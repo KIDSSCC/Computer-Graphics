@@ -1,0 +1,9 @@
+Model Sphere1
+Translation 50 0 1100
+
+Sphere Sphere Phong
+N 0 0 1
+P 0 0 0
+R 50
+
+End

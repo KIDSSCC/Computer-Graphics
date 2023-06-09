@@ -132,12 +132,20 @@ namespace SimplePathTracer
         // hit object
         //是指先碰到了物体，后碰到了区域光源。
         if (hitObject && hitObject->t < t) {
+
+            //获取撞击点的材质句柄
             auto mtlHandle = hitObject->material;
             auto scattered = shaderPrograms[mtlHandle.index()]->shade(r, hitObject->hitPoint, hitObject->normal);
+            
+            //得到散射后的光线，衰减系数，和发射光照
             auto scatteredRay = scattered.ray;
             auto attenuation = scattered.attenuation;
             auto emitted = scattered.emitted;
+
+            //递归调用
             auto next = trace(scatteredRay, currDepth+1);
+
+            //入射角的余弦值
             float n_dot_in = glm::dot(hitObject->normal, scatteredRay.direction);
             float pdf = scattered.pdf;
             /**
@@ -147,6 +155,8 @@ namespace SimplePathTracer
              * atteunation  - BRDF
              * pdf          - p(w)
              **/
+
+            //在此处考虑了发射光照和散射光照的总和
             return emitted + attenuation * next * n_dot_in / pdf;
         }
         // 
