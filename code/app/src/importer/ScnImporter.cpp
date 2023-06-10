@@ -292,6 +292,8 @@ namespace NRenderer
     }
 
     bool ScnImporter::parseLgt(Asset& asset, ifstream& file) {
+
+        //对光源类型的加载。
         bool successFlag = true;
 
         string currline;
@@ -308,7 +310,7 @@ namespace NRenderer
             if (token == "") continue;
 
             else if (token[0] == '#') continue;
-
+            //点光源
             else if (token == "Point") {
                 LightItem li{};
                 string name;
@@ -321,6 +323,7 @@ namespace NRenderer
                 asset.lightItems.push_back(li);
                 asset.pointLights.push_back(make_shared<PointLight>());
             }
+            //聚光灯
             else if (token == "Spot") {
                 LightItem li{};
                 string name;
@@ -333,6 +336,7 @@ namespace NRenderer
                 asset.lightItems.push_back(li);
                 asset.spotLights.push_back(make_shared<SpotLight>());
             }
+            //平行光源
             else if (token == "Directional") {
                 LightItem li{};
                 string name;
@@ -345,6 +349,7 @@ namespace NRenderer
                 asset.lightItems.push_back(li);
                 asset.directionalLights.push_back(make_shared<DirectionalLight>());
             }
+            //面光源
             else if (token == "Area") {
                 LightItem li{};
                 string name;
@@ -358,6 +363,9 @@ namespace NRenderer
                 asset.areaLights.push_back(make_shared<AreaLight>());
             }
             // Value irradiance, radiance or intensity
+            //对于点光源和聚光源是光的强度
+            //对于平行光是辐射强度
+            //对于面光源是亮度
             else if (token == "IRV") {
                 float f1, f2, f3;
                 ss>>f1>>f2>>f3;

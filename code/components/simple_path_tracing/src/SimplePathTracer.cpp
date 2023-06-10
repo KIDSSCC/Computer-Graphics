@@ -7,6 +7,16 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
+
+#include <ctime>
+#include<sstream>
+#include<random>
+#include<cmath>
+std::random_device rd;
+std::mt19937 gen(rd());
+std::uniform_real_distribution<float> dis(0.0f, 1.0f);
+
+
 namespace SimplePathTracer
 {
     RGB SimplePathTracerRenderer::gamma(const RGB& rgb) {
@@ -16,25 +26,30 @@ namespace SimplePathTracer
     void SimplePathTracerRenderer::renderTask(RGBA* pixels, int width, int height, int off, int step) {
         //off是偏移量，代表了从第几行开始进行渲染
         //step是每次渲染的行数
-        for(int i=off; i<height; i+=step) {
-            for (int j=0; j<width; j++) {
-                Vec3 color{0, 0, 0};
-
-                //samples是当前类中设定的采样次数
-                for (int k=0; k < samples; k++) {
-
-                    //在（-1，-1）至（1，1）中均匀分布的随机二维向量
-                    auto r = defaultSamplerInstance<UniformInSquare>().sample2d();
-                    float rx = r.x;
-                    float ry = r.y;
-                    float x = (float(j)+rx)/float(width);
-                    float y = (float(i)+ry)/float(height);
-                    auto ray = camera.shoot(x, y);
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                Vec3 color{ 0, 0, 0 };
+                for (int k = 0; k < samples; k++)
+                {
+                    float u, v;
+                    if (k % 2 == 0)
+                    {
+                        u = dis(gen);
+                        v = dis(gen);
+                    }
+                    else
+                    {
+                        u = (static_cast<float>(j) + dis(gen)) / static_cast<float>(width);
+                        v = (static_cast<float>(i) + dis(gen)) / static_cast<float>(height);
+                    }
+                    auto ray = camera.shoot(u, v);
                     color += trace(ray, 0);
                 }
                 color /= samples;
                 color = gamma(color);
-                pixels[(height-i-1)*width+j] = {color, 1};
+                pixels[(height - i - 1) * width + j] = { color, 1 };
             }
         }
     }
@@ -53,7 +68,7 @@ namespace SimplePathTracer
         VertexTransformer vertexTransformer{};
         vertexTransformer.exec(spScene);
 
-        const auto taskNums = 8;
+        const auto taskNums = 1;
         thread t[taskNums];
         for (int i=0; i < taskNums; i++) {
             t[i] = thread(&SimplePathTracerRenderer::renderTask,
@@ -122,11 +137,12 @@ namespace SimplePathTracer
         return { closest->t, v };
     }
 
-    RGB SimplePathTracerRenderer::trace(const Ray& r, int currDepth) {
+    RGB SimplePathTracerRenderer::trace(const Ray& r, int currDepth) 
+    {
         //如果已经达到当前的最大深度，则直接返回当前的环境背景光
         if (currDepth == depth) return scene.ambient.constant;
         auto hitObject = closestHitObject(r);
-
+        
         //找到与光线最近的光源的交点信息。获取距离和辐射强度
         auto [ t, emitted ] = closestHitLight(r);
         // hit object
@@ -136,7 +152,6 @@ namespace SimplePathTracer
             //获取撞击点的材质句柄
             auto mtlHandle = hitObject->material;
             auto scattered = shaderPrograms[mtlHandle.index()]->shade(r, hitObject->hitPoint, hitObject->normal);
-            
             //得到散射后的光线，衰减系数，和发射光照
             auto scatteredRay = scattered.ray;
             auto attenuation = scattered.attenuation;
@@ -166,5 +181,7 @@ namespace SimplePathTracer
         else {
             return Vec3{0};
         }
+
+        
     }
 }

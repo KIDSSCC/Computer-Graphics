@@ -3,7 +3,7 @@
 
 #include "Onb.hpp"
 
-namespace SimplePathTracer
+namespace Photonmap
 {
     Lambertian::Lambertian(Material& material, vector<Texture>& textures)
         : Shader                (material, textures)

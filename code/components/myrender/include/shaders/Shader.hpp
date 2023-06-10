@@ -6,19 +6,20 @@
 #include "common/macros.hpp"
 #include "scene/Scene.hpp"
 
-#include "Scattered.hpp"
+#include "Ray.hpp"
+#include "shaders/Scattered.hpp"
 
-namespace SimplePathTracer
+namespace Photonmap
 {
     using namespace NRenderer;
     using namespace std;
 
     constexpr float PI = 3.1415926535898f;
-    //ï¿½ï¿½È¾Ê±ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½
+    //äÖÈ¾Ê±µÄ×ÅÉ«Æ÷
     class Shader
     {
     protected:
-        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        //²ÄÖÊÓëÎÆÀíµÄÒıÓÃ
         Material& material;
         vector<Texture>& textureBuffer;
     public:

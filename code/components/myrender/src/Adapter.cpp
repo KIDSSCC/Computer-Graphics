@@ -1,8 +1,14 @@
 #include "component/RenderComponent.hpp"
 #include "server/Server.hpp"
+#include "component/RenderComponent.hpp"
+#include "Camera.hpp"
 
+#include "Photonmap.hpp"
 
-namespace RenderExample
+using namespace std;
+using namespace NRenderer;
+
+namespace Photonmap
 {
     using namespace std;
     using namespace NRenderer;
@@ -11,29 +17,14 @@ namespace RenderExample
     class Adapter : public RenderComponent
     {
         void render(SharedScene spScene) {
-            getServer().logger.log("Simply Output some color");
-            _sleep(1000);
-
-            int height = spScene->renderOption.height;
-            int width = spScene->renderOption.width;
-            RGBA* pixels = new RGBA[height*width]{};
-            for (int i=0; i<height; i++) {
-                for (int j=0; j<width; j++) {
-                    pixels[i*width+j] = {float(i)/float(height), float(j)/float(width), 1.f, 1.f};
-                }
-            }
-            // 输出颜色
+            PhotonmapRender renderer{ spScene };
+            auto renderResult = renderer.render();
+            auto [pixels, width, height] = renderResult;
             getServer().screen.set(pixels, width, height);
-            delete[] pixels;
-
-            // logger
-            getServer().logger.log("common...");
-            getServer().logger.success("success...");
-            getServer().logger.warning("warning...");
-            getServer().logger.error("error...");
+            renderer.release(renderResult);
         }
     };
 }
 
 // REGISTER_RENDERER(Name, Description, Class)
-REGISTER_RENDERER(myrender, "own render test", RenderExample::Adapter);
+REGISTER_RENDERER(myrender, "own render test", Photonmap::Adapter);

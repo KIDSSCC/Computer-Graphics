@@ -402,7 +402,6 @@ namespace NRenderer
 
                 //场景中的所有模型
                 auto& mis = manager.assetManager.asset.modelItems;
-                cout << "before traverse: " << mis.size() << endl;
                 for(int i=0; i<mis.size(); i++) {
 
                     
