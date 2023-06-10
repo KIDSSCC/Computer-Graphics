@@ -68,9 +68,18 @@ namespace Photonmap
 		//发射光子
 		void emitPhotons(int numPhotons);
 		//构建光子图
-		void buildPhotonMap();
+		void buildPhotonMap(Photon photon);
+		
+		//光子与物体的碰撞
+		HitRecord PhotonHit(Ray r);
+		
 		//根据光子映射图进行渲染
 		void renderTask(RGBA* pixels, int width, int height, int off, int step);
+		//光线的追踪
+		Vec3 traceRay(Ray r);
+
+		Vec3 computeDirectLighting(HitRecord h);
+		Vec3 computeIndirectLighting(HitRecord h);
 	};
 }
 

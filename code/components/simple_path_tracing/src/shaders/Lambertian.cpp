@@ -8,15 +8,15 @@ namespace SimplePathTracer
     Lambertian::Lambertian(Material& material, vector<Texture>& textures)
         : Shader                (material, textures)
     {
-        //»ñÈ¡materialÖÐµÄdiffuseColorÊôÐÔ£¬Èç¹ûÓÐÔò¸³¸øalbedo
+        //ï¿½ï¿½È¡materialï¿½Ðµï¿½diffuseColorï¿½ï¿½ï¿½Ô£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ò¸³¸ï¿½albedo
         auto diffuseColor = material.getProperty<Property::Wrapper::RGBType>("diffuseColor");
         if (diffuseColor) albedo = (*diffuseColor).value;
         else albedo = {1, 1, 1};
     }
     Scattered Lambertian::shade(const Ray& ray, const Vec3& hitPoint, const Vec3& normal) const {
-        //É¢Éä¹âÏßµÄÆðÊ¼µã£¬
+        //É¢ï¿½ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½Ê¼ï¿½ã£¬
         Vec3 origin = hitPoint;
-        //°ëÇòÃæÉÏËæ»ú²ÉÑù
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
         Vec3 random = defaultSamplerInstance<HemiSphere>().sample3d();
         // if (normal == Vec3{0, 0, 1}) {
