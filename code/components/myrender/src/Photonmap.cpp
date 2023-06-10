@@ -4,6 +4,8 @@
 #include "intersections/intersections.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+#include<iostream>
+
 namespace Photonmap
 {
     RGB PhotonmapRender::gamma(const RGB& rgb) {
@@ -43,12 +45,15 @@ namespace Photonmap
         for (int i = 0; i < taskNums; i++) {
             t[i].join();
         }
+
+        emitPhotons(5);
         getServer().logger.log("Done...");
         return { pixels, width, height };
     }
 
-    void emitPhotons(int numPhotons)
+    void PhotonmapRender::emitPhotons(int numPhotons)
     {
-
+        //在光源上进行随机采样。
+        auto r = defaultSamplerInstance<UniformPostiveSquare>().sample2d();
     }
 }
